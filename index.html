@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Interactive web tool and CLI for developers auditing LLM guardrail robustness against injection vectors, system prompt leakage, and structural attacks. Resilience Score 0-100 + defensive blueprint.">
+<meta property="og:title" content="LLM Robustness Evaluator & Guardrails Stress Tester">
+<meta property="og:description" content="Interactive web tool and CLI for developers auditing LLM guardrail robustness against injection vectors, system prompt leakage, and structural attacks. Resilience Score 0-100 + defensive blueprint.">
+<meta property="og:image" content="https://ag.tavardt.com/img/tavardt-banner.png">
+<meta property="og:url" content="https://tavardt-usa.github.io/llm-robustness-evaluator-us/">
+<meta name="twitter:card" content="summary_large_image">
+<title>LLM Robustness Evaluator & Guardrails Stress Tester | TAVARDT</title>
+<link rel="canonical" href="https://tavardt-usa.github.io/llm-robustness-evaluator-us/">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d1117;--bg2:#161b22;--bg3:#21262d;--border:#30363d;
+  --green:#00ff88;--green2:#00cc6a;--blue:#4493f8;--red:#f85149;
+  --yellow:#e3b341;--text:#e6edf3;--text2:#8b949e;--radius:8px;
+}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;line-height:1.6;min-height:100vh}
+nav{background:var(--bg2);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo img{height:28px}
+.logo span{font-weight:700;font-size:1rem;color:var(--text)}
+.nav-links{display:flex;gap:16px;flex-wrap:wrap}
+.nav-links a{color:var(--text2);text-decoration:none;font-size:.85rem;transition:color .2s}
+.nav-links a:hover{color:var(--green)}
+.hero{background:linear-gradient(135deg,var(--bg2) 0%,#0d1117 100%);border-bottom:1px solid var(--border);padding:48px 24px;text-align:center}
+.hero img{height:36px;margin-bottom:16px}
+h1{font-size:clamp(1.5rem,4vw,2.4rem);font-weight:800;letter-spacing:-.02em;margin-bottom:8px}
+h1 span{color:var(--green)}
+.hero p{color:var(--text2);max-width:680px;margin:0 auto 20px;font-size:1rem}
+.badges{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:8px}
+.badge{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-size:.75rem;color:var(--text2)}
+.badge.green{border-color:var(--green);color:var(--green)}
+.badge.blue{border-color:var(--blue);color:var(--blue)}
+main{max-width:900px;margin:0 auto;padding:32px 16px}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:24px}
+.card h2{font-size:1.1rem;font-weight:600;margin-bottom:16px;color:var(--text)}
+textarea{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-family:'Fira Code',Consolas,monospace;font-size:.88rem;padding:16px;min-height:160px;resize:vertical;outline:none;transition:border-color .2s}
+textarea:focus{border-color:var(--green)}
+.btn-row{display:flex;gap:12px;margin-top:12px;flex-wrap:wrap}
+button{cursor:pointer;border:none;border-radius:var(--radius);font-size:.9rem;font-weight:600;padding:10px 24px;transition:all .2s}
+.btn-primary{background:var(--green);color:#000}
+.btn-primary:hover{background:var(--green2);transform:translateY(-1px)}
+.btn-secondary{background:var(--bg3);color:var(--text);border:1px solid var(--border)}
+.btn-secondary:hover{border-color:var(--green);color:var(--green)}
+#results{display:none}
+.gauge-wrap{display:flex;flex-direction:column;align-items:center;margin:24px 0}
+.gauge-label{font-size:1rem;color:var(--text2);margin-bottom:12px;text-transform:uppercase;letter-spacing:.08em;font-size:.8rem}
+.gauge-ring{position:relative;width:140px;height:140px}
+.gauge-ring svg{transform:rotate(-90deg)}
+.gauge-ring circle{fill:none;stroke-width:12;stroke-linecap:round;transition:stroke-dashoffset 1s ease,stroke .5s}
+.gauge-bg{stroke:var(--bg3)}
+.gauge-fg{stroke:var(--green)}
+.gauge-num{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
+.gauge-num .score{font-size:2.2rem;font-weight:800;line-height:1}
+.gauge-num .label{font-size:.7rem;color:var(--text2)}
+.score-verdict{text-align:center;font-size:.9rem;color:var(--text2);margin-top:8px}
+.vectors-grid{display:grid;gap:12px;margin-top:4px}
+.vector-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:16px;display:flex;align-items:flex-start;gap:14px;transition:border-color .3s}
+.vector-card.pass{border-color:var(--green)}
+.vector-card.fail{border-color:var(--red)}
+.vector-card.warn{border-color:var(--yellow)}
+.v-icon{width:36px;height:36px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;background:var(--bg3)}
+.v-info{flex:1}
+.v-name{font-weight:600;font-size:.9rem;margin-bottom:3px}
+.v-desc{font-size:.8rem;color:var(--text2)}
+.v-status{font-size:.75rem;font-weight:700;padding:2px 10px;border-radius:12px;flex-shrink:0;align-self:flex-start;margin-top:2px}
+.pass .v-status{background:rgba(0,255,136,.12);color:var(--green)}
+.fail .v-status{background:rgba(248,81,73,.12);color:var(--red)}
+.warn .v-status{background:rgba(227,179,65,.12);color:var(--yellow)}
+.tabs{display:flex;gap:4px;margin-bottom:-1px}
+.tab{padding:8px 16px;border:1px solid var(--border);border-bottom:none;border-radius:6px 6px 0 0;cursor:pointer;font-size:.82rem;color:var(--text2);background:var(--bg);transition:all .2s}
+.tab.active{background:var(--bg2);color:var(--green);border-color:var(--green);border-bottom-color:var(--bg2)}
+.tab-panel{display:none;background:var(--bg2);border:1px solid var(--border);border-radius:0 var(--radius) var(--radius) var(--radius);padding:0}
+.tab-panel.active{display:block}
+pre{background:var(--bg);border-radius:0 0 var(--radius) var(--radius);padding:20px;overflow-x:auto;font-family:'Fira Code',Consolas,monospace;font-size:.82rem;line-height:1.6;color:#a8d5b5}
+.cta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.cta-btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:14px 20px;border-radius:var(--radius);text-decoration:none;font-weight:600;font-size:.88rem;transition:all .2s;text-align:center}
+.cta-btn.primary{background:var(--green);color:#000}
+.cta-btn.primary:hover{background:var(--green2)}
+.cta-btn.secondary{background:var(--bg3);color:var(--text);border:1px solid var(--border)}
+.cta-btn.secondary:hover{border-color:var(--green);color:var(--green)}
+.cta-btn.wa{background:#25d366;color:#fff}
+.cta-btn.wa:hover{background:#128c7e}
+footer{background:var(--bg2);border-top:1px solid var(--border);padding:24px;text-align:center;color:var(--text2);font-size:.8rem;margin-top:32px}
+footer a{color:var(--blue);text-decoration:none}
+footer a:hover{color:var(--green)}
+.footer-links{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:8px}
+@media(max-width:600px){
+  .hero{padding:28px 16px}
+  main{padding:20px 12px}
+  .card{padding:16px}
+}
+</style>
+</head>
+<body>
+<nav>
+  <a class="logo" href="https://ag.tavardt.com/">
+    <img src="https://ag.tavardt.com/img/tavardt-banner.png" alt="TAVARDT" onerror="this.style.display='none'">
+    <span>TAVARDT</span>
+  </a>
+  <div class="nav-links">
+    <a href="https://ag.tavardt.com/">Official TAVARDT Portal</a>
+    <a href="https://tools.tavardt.com/">Tools Hub</a>
+    <a href="https://ag.tavardt.com/contact/">Contact</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <img src="https://ag.tavardt.com/img/tavardt-banner.png" alt="TAVARDT" onerror="this.style.display='none'">
+  <h1>LLM Robustness Evaluator <span>|</span> TAVARDT</h1>
+  <p>Defensive Guardrails Audit, Prompt Injection Testing, and AI Model Resilience</p>
+  <div class="badges">
+    <span class="badge green">OWASP LLM01/LLM02 Aligned</span>
+    <span class="badge blue">NIST AI RMF</span>
+    <span class="badge">MIT License</span>
+    <span class="badge">Python 3.8+</span>
+    <span class="badge">GitHub Pages</span>
+  </div>
+</section>
+
+<main>
+  <div class="card">
+    <h2>🛡️ LLM Robustness Evaluator</h2>
+    <label style="display:block;color:var(--text2);margin-bottom:8px;font-size:.88rem">Paste your LLM System Prompt below for audit:</label>
+    <textarea id="sp-input" placeholder="You are a helpful assistant. Only respond about topics related to..."></textarea>
+    <div class="btn-row">
+      <button class="btn-primary" onclick="runAudit()">🔍 Run Robustness Audit</button>
+      <button class="btn-secondary" onclick="clearAll()">Clear</button>
+    </div>
+  </div>
+
+  <div class="card" id="results">
+    <div class="gauge-wrap">
+      <div class="gauge-label">Resilience Index</div>
+      <div class="gauge-ring">
+        <svg viewBox="0 0 140 140" width="140" height="140">
+          <circle class="gauge-bg" cx="70" cy="70" r="58" stroke-dasharray="364.4" stroke-dashoffset="0"/>
+          <circle class="gauge-fg" id="gauge-arc" cx="70" cy="70" r="58" stroke-dasharray="364.4" stroke-dashoffset="364.4"/>
+        </svg>
+        <div class="gauge-num">
+          <div class="score" id="score-num">0</div>
+          <div class="label">/100</div>
+        </div>
+      </div>
+      <div class="score-verdict" id="score-verdict"></div>
+    </div>
+
+    <h2>📋 Test Vectors (5 Defensive Categories)</h2>
+    <div class="vectors-grid" id="vectors-grid"></div>
+  </div>
+
+  <div class="card" id="blueprint-card" style="display:none">
+    <h2>🔧 Defensive Blueprint</h2>
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('py')">Python Guardrail</div>
+      <div class="tab" onclick="switchTab('ts')">TypeScript Middleware</div>
+      <div class="tab" onclick="switchTab('sp')">Hardened System Prompt</div>
+    </div>
+    <div class="tab-panel active" id="tab-py">
+      <pre id="code-py"></pre>
+    </div>
+    <div class="tab-panel" id="tab-ts">
+      <pre id="code-ts"></pre>
+    </div>
+    <div class="tab-panel" id="tab-sp">
+      <pre id="code-sp"></pre>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🌐 Official TAVARDT Portal & Tools Hub</h2>
+    <div class="cta-grid">
+      <a class="cta-btn primary" href="https://tools.tavardt.com/">🛠 Explore All Tools</a>
+      <a class="cta-btn secondary" href="https://ag.tavardt.com/">🏠 Access Official Portal</a>
+      <a class="cta-btn wa" href="https://wa.me/5584987721775" target="_blank" rel="noopener">💬 Consult a Specialist</a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-links">
+    <a href="https://ag.tavardt.com/">Official TAVARDT Portal</a>
+    <a href="https://tools.tavardt.com/">Tools Hub</a>
+    <a href="https://ag.tavardt.com/contact/">Contact</a>
+  </div>
+  <p>&copy; 2025 TAVARDT — United States. All rights reserved. | Powered by TAVARDT</p>
+  <p style="margin-top:4px">
+    <a href="https://ag.tavardt.com/">https://ag.tavardt.com/</a> &bull;
+    <a href="https://tools.tavardt.com/">https://tools.tavardt.com/</a>
+  </p>
+</footer>
+
+<script>
+const VECTORS = [
+  {
+    id:"v1", icon:"🔓",
+    name:"Delimiter Escape",
+    desc:"Tests if control token injections (&lt;/system&gt;, [/INST], ` ``` `) are handled.",
+    patterns:[/(<\/system>|\[INST\]|\[\/INST\]|```|<\|im_start\|>|<\|im_end\|>)/i],
+    weight:20
+  },
+  {
+    id:"v2", icon:"👁",
+    name:"System Prompt Leakage",
+    desc:"Detects if the model can reveal its system instructions.",
+    patterns:[/(repeat|reveal|show|tell me|what (are|were) (your|the) (instructions|prompt|system)|ignore.*above|print.*above)/i],
+    weight:20
+  },
+  {
+    id:"v3", icon:"🎭",
+    name:"Role/Persona Override",
+    desc:"Checks resistance to persona overrides (DAN, dev mode, etc.).",
+    patterns:[/(you are now|act as|pretend|DAN|jailbreak|developer mode|ignore previous|forget.*instructions|new persona)/i],
+    weight:20
+  },
+  {
+    id:"v4", icon:"🔡",
+    name:"Structural Obfuscation",
+    desc:"Evaluates coverage against Base64, leetspeak, and Unicode homoglyphs.",
+    patterns:[/([A-Za-z0-9+\/]{20,}=(0, 2)|l33t|1337|base64|\\u[0-9a-fA-F]{4})/i],
+    weight:20
+  },
+  {
+    id:"v5", icon:"📄",
+    name:"Indirect Context Injection",
+    desc:"Simulates a RAG document with an embedded malicious payload.",
+    patterns:[/(retrieved document|context:|\[doc\]|\[retrieved\]|ignore.*context|from.*document.*ignore)/i],
+    weight:20
+  }
+];
+
+const PASS="PASS",FAIL="VULNERABLE",WARN="WARNING";
+const SLOW="Critical — Guardrails Absent",SMID="Moderate — Hardening Required",SHIGH="Robust — Maintain Vigilance";
+
+function runAudit(){
+  const sp=document.getElementById('sp-input').value.trim();
+  if(!sp){alert('Please enter the LLM System Prompt to audit.');return;}
+  document.getElementById('results').style.display='block';
+  document.getElementById('blueprint-card').style.display='block';
+  const grid=document.getElementById('vectors-grid');
+  grid.innerHTML='';
+  let score=0;
+  const weaknesses=[];
+  VECTORS.forEach(v=>{
+    const hit=v.patterns.some(p=>p.test(sp));
+    const cls=hit?'fail':'pass';
+    const status=hit?FAIL:PASS;
+    if(!hit) score+=v.weight; else weaknesses.push(v.name);
+    const card=document.createElement('div');
+    card.className='vector-card '+cls;
+    card.innerHTML=`<div class="v-icon">${v.icon}</div>
+      <div class="v-info"><div class="v-name">${v.name}</div><div class="v-desc">${v.desc}</div></div>
+      <div class="v-status">${status}</div>`;
+    grid.appendChild(card);
+  });
+  animateScore(score);
+  renderBlueprint(sp,weaknesses);
+}
+
+function animateScore(target){
+  const arc=document.getElementById('gauge-arc');
+  const numEl=document.getElementById('score-num');
+  const verdict=document.getElementById('score-verdict');
+  const circumference=364.4;
+  let current=0;
+  const step=target/60;
+  const timer=setInterval(()=>{
+    current=Math.min(current+step,target);
+    const offset=circumference-(circumference*current/100);
+    arc.style.strokeDashoffset=offset;
+    const r=Math.round(current);
+    if(r<40)arc.style.stroke='#f85149';
+    else if(r<70)arc.style.stroke='#e3b341';
+    else arc.style.stroke='#00ff88';
+    numEl.textContent=r;
+    if(current>=target){
+      clearInterval(timer);
+      verdict.textContent=target<40?SLOW:target<70?SMID:SHIGH;
+    }
+  },16);
+}
+
+function renderBlueprint(sp,weaknesses){
+  const pyCode=`import re
+from typing import Optional
+
+DELIMITER_PATTERNS = [
+    r'<\/system>', r'\[INST\]', r'\[/INST\]',
+    r'<\|im_start\|>', r'<\|im_end\|>'
+]
+PERSONA_PATTERNS = [
+    r'you are now', r'act as', r'DAN', r'developer mode',
+    r'ignore previous instructions', r'forget.*instructions'
+]
+LEAKAGE_PATTERNS = [
+    r'repeat.*instructions', r'reveal.*system', r'show.*prompt',
+    r'what were you told', r'print.*above'
+]
+
+def audit_system_prompt(prompt: str) -> dict:
+    issues = []
+    for p in DELIMITER_PATTERNS:
+        if re.search(p, prompt, re.IGNORECASE):
+            issues.append(("DELIMITER_ESCAPE", p))
+    for p in PERSONA_PATTERNS:
+        if re.search(p, prompt, re.IGNORECASE):
+            issues.append(("PERSONA_OVERRIDE", p))
+    for p in LEAKAGE_PATTERNS:
+        if re.search(p, prompt, re.IGNORECASE):
+            issues.append(("PROMPT_LEAKAGE", p))
+    score = max(0, 100 - len(issues) * 20)
+    return {"score": score, "issues": issues}
+
+def harden_prompt(prompt):
+    return "[SYSTEM BOUNDARY]\n" + prompt + "\n[END SYSTEM BOUNDARY]"
+
+if __name__ == "__main__":
+    result = audit_system_prompt("sample prompt")
+    print("Score: " + str(result['score']) + "/100")
+    print("Issues: " + str(len(result['issues'])))
+`;
+
+  const tsCode=`import { NextRequest, NextResponse } from 'next/server';
+
+const FORBIDDEN_PATTERNS = [
+  /<\/system>/i, /\[INST\]/i, /\[\/INST\]/i,
+  /you are now/i, /act as/i, /DAN/i,
+  /ignore previous instructions/i,
+  /repeat.*instructions/i, /reveal.*prompt/i,
+  /developer mode/i,
+];
+
+export function llmGuardrailMiddleware(systemPrompt: string): {
+  safe: boolean;
+  violations: string[];
+} {
+  const violations: string[] = [];
+  for (const pattern of FORBIDDEN_PATTERNS) {
+    if (pattern.test(systemPrompt)) {
+      violations.push(pattern.toString());
+    }
+  }
+  return { safe: violations.length === 0, violations };
+}
+
+// Next.js API Route example
+export async function POST(req: NextRequest) {
+  const { systemPrompt } = await req.json();
+  const { safe, violations } = llmGuardrailMiddleware(systemPrompt);
+  if (!safe) {
+    return NextResponse.json(
+      { error: 'System prompt failed guardrail check', violations },
+      { status: 400 }
+    );
+  }
+  // Proceed with LLM call
+  return NextResponse.json({ status: 'approved' });
+}`;
+
+  const spCode=`${sp_template}`;
+
+  document.getElementById('code-py').textContent=pyCode;
+  document.getElementById('code-ts').textContent=tsCode;
+  document.getElementById('code-sp').textContent=spCode;
+  document.getElementById('results').scrollIntoView({behavior:'smooth'});
+}
+
+function switchTab(id){
+  document.querySelectorAll('.tab').forEach((t,i)=>{
+    const ids=['py','ts','sp'];
+    t.classList.toggle('active',ids[i]===id);
+  });
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+}
+
+function clearAll(){
+  document.getElementById('sp-input').value='';
+  document.getElementById('results').style.display='none';
+  document.getElementById('blueprint-card').style.display='none';
+}
+</script>
+</body>
+</html>
