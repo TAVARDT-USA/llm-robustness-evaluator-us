@@ -157,6 +157,15 @@
   color: #ffffff;
 }
 
+/* Centered Button Row */
+.btn-row, .sample-buttons {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  gap: 12px !important;
+}
+
 /* Primary Action Buttons */
 .btn-primary, button.btn-primary, .btn-action-main, #btn-generate-blueprint, #btn-audit, .btn-run, #run-audit-btn, .btn-execute, .btn-analyze, .cta-btn.primary, .btn-act, #btn-copy {
   background: #1e00ff !important;
@@ -413,7 +422,7 @@ footer a:hover{color:var(--green)}
     <label style="display:block;color:var(--text2);margin-bottom:8px;font-size:.88rem">Paste your LLM System Prompt below for audit:</label>
     <textarea id="sp-input" placeholder="You are a helpful assistant. Only respond about topics related to..."></textarea>
     <div class="btn-row">
-      <button class="btn-primary" onclick="runAudit()">🔍 Run Robustness Audit</button>
+      <button class="btn-primary" onclick="runAudit()">Run Robustness Audit</button>
       <button class="btn-secondary" onclick="clearAll()">Clear</button>
     </div>
   </div>
@@ -459,9 +468,9 @@ footer a:hover{color:var(--green)}
   <div class="card">
     <h2>🌐 Official TAVARDT Portal & Tools Hub</h2>
     <div class="cta-grid">
-      <a class="cta-btn primary" href="https://tools.tavardt.com/">🛠 Explore All Tools</a>
-      <a class="cta-btn secondary" href="https://ag.tavardt.com/">🏠 Access Official Portal</a>
-      <a class="cta-btn wa" href="https://ag.tavardt.com/contact/" target="_blank" rel="noopener">💬 Consult a Specialist</a>
+      <a class="cta-btn primary" href="https://tools.tavardt.com/">Explore All Tools</a>
+      <a class="cta-btn secondary" href="https://ag.tavardt.com/">Access Official Portal</a>
+      <a class="cta-btn wa" href="https://ag.tavardt.com/contact/" target="_blank" rel="noopener">Consult a Specialist</a>
     </div>
   </div>
 </main>
