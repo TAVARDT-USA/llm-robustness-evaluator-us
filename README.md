@@ -1,16 +1,11 @@
+
+# LLM Robustness Evaluator & Guardrails Stress Tester
+
 [![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live-00ff88?style=flat-square&logo=github)](https://tavardt-usa.github.io/llm-robustness-evaluator-us/)
 [![Python](https://img.shields.io/badge/Python-3.8+-blue?style=flat-square&logo=python)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
 [![OWASP LLM](https://img.shields.io/badge/OWASP-LLM01%2FLLM02-red?style=flat-square)](https://owasp.org/www-project-top-10-for-large-language-model-applications/)
 [![NIST AI RMF](https://img.shields.io/badge/NIST-AI%20RMF-blue?style=flat-square)](https://www.nist.gov/artificial-intelligence)
-
-<p align="center">
-  <a href="https://ag.tavardt.com/">
-    <img src="https://ag.tavardt.com/img/tavardt-banner.png" alt="TAVARDT" width="600">
-  </a>
-</p>
-
-# LLM Robustness Evaluator & Guardrails Stress Tester
 
 **Defensive Guardrails Audit, Prompt Injection Testing, and AI Model Resilience**
 
@@ -104,5 +99,5 @@ MIT License — free use for defensive and educational purposes.
   <strong>TAVARDT — United States</strong><br>
   <a href="https://ag.tavardt.com/">https://ag.tavardt.com/</a> &bull;
   <a href="https://tools.tavardt.com/">https://tools.tavardt.com/</a><br>
-  &copy; 2025 TAVARDT. All rights reserved.
+  &copy; 2026 TAVARDT. All rights reserved.
 </p>
