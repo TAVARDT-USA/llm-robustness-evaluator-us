@@ -78,10 +78,106 @@
   ]
 }
   </script>
-  <style>
+
+
+
+
+
+
+
+
+
+
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d1117;--bg2:#161b22;--bg3:#21262d;--border:#30363d;
+  --green:#00ff88;--green2:#00cc6a;--blue:#4493f8;--red:#f85149;
+  --yellow:#e3b341;--text:#e6edf3;--text2:#8b949e;--radius:8px;
+}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;line-height:1.6;min-height:100vh}
+nav{background:var(--bg2);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo img{height:28px}
+.logo span{font-weight:700;font-size:1rem;color:var(--text)}
+.nav-links{display:flex;gap:16px;flex-wrap:wrap}
+.nav-links a{color:var(--text2);text-decoration:none;font-size:.85rem;transition:color .2s}
+.nav-links a:hover{color:var(--green)}
+.hero{background:linear-gradient(135deg,var(--bg2) 0%,#0d1117 100%);border-bottom:1px solid var(--border);padding:48px 24px;text-align:center}
+.hero img{height:36px;margin-bottom:16px}
+h1{font-size:clamp(1.5rem,4vw,2.4rem);font-weight:800;letter-spacing:-.02em;margin-bottom:8px}
+h1 span{color:var(--green)}
+.hero p{color:var(--text2);max-width:680px;margin:0 auto 20px;font-size:1rem}
+.badges{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:8px}
+.badge{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-size:.75rem;color:var(--text2)}
+.badge.green{border-color:var(--green);color:var(--green)}
+.badge.blue{border-color:var(--blue);color:var(--blue)}
+main{max-width:900px;margin:0 auto;padding:32px 16px}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:24px}
+.card h2{font-size:1.1rem;font-weight:600;margin-bottom:16px;color:var(--text)}
+textarea{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-family:'Fira Code',Consolas,monospace;font-size:.88rem;padding:16px;min-height:160px;resize:vertical;outline:none;transition:border-color .2s}
+textarea:focus{border-color:var(--green)}
+.btn-row{display:flex;gap:12px;margin-top:12px;flex-wrap:wrap}
+button{cursor:pointer;border:none;border-radius:9999px;font-size:.9rem;font-weight:600;padding:12px 28px;transition:all .3s}
+.btn-primary{background:#1e00ff;color:#fff;box-shadow:0 0 30px rgba(30,0,255,0.7)}
+.btn-primary:hover{box-shadow:0 0 40px rgba(30,0,255,0.95);transform:translateY(-1px)}
+.btn-secondary{background:var(--bg3);color:var(--text);border:1px solid var(--border)}
+.btn-secondary:hover{border-color:#1e00ff;color:#fff}
+#results{display:none}
+.gauge-wrap{display:flex;flex-direction:column;align-items:center;margin:24px 0}
+.gauge-label{font-size:1rem;color:var(--text2);margin-bottom:12px;text-transform:uppercase;letter-spacing:.08em;font-size:.8rem}
+.gauge-ring{position:relative;width:140px;height:140px}
+.gauge-ring svg{transform:rotate(-90deg)}
+.gauge-ring circle{fill:none;stroke-width:12;stroke-linecap:round;transition:stroke-dashoffset 1s ease,stroke .5s}
+.gauge-bg{stroke:var(--bg3)}
+.gauge-fg{stroke:var(--green)}
+.gauge-num{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
+.gauge-num .score{font-size:2.2rem;font-weight:800;line-height:1}
+.gauge-num .label{font-size:.7rem;color:var(--text2)}
+.score-verdict{text-align:center;font-size:.9rem;color:var(--text2);margin-top:8px}
+.vectors-grid{display:grid;gap:12px;margin-top:4px}
+.vector-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:16px;display:flex;align-items:flex-start;gap:14px;transition:border-color .3s}
+.vector-card.pass{border-color:var(--green)}
+.vector-card.fail{border-color:var(--red)}
+.vector-card.warn{border-color:var(--yellow)}
+.v-icon{width:36px;height:36px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;background:var(--bg3)}
+.v-info{flex:1}
+.v-name{font-weight:600;font-size:.9rem;margin-bottom:3px}
+.v-desc{font-size:.8rem;color:var(--text2)}
+.v-status{font-size:.75rem;font-weight:700;padding:2px 10px;border-radius:12px;flex-shrink:0;align-self:flex-start;margin-top:2px}
+.pass .v-status{background:rgba(0,255,136,.12);color:var(--green)}
+.fail .v-status{background:rgba(248,81,73,.12);color:var(--red)}
+.warn .v-status{background:rgba(227,179,65,.12);color:var(--yellow)}
+.tabs{display:flex;gap:4px;margin-bottom:-1px}
+.tab{padding:8px 16px;border:1px solid var(--border);border-bottom:none;border-radius:6px 6px 0 0;cursor:pointer;font-size:.82rem;color:var(--text2);background:var(--bg);transition:all .2s}
+.tab.active{background:var(--bg2);color:var(--green);border-color:var(--green);border-bottom-color:var(--bg2)}
+.tab-panel{display:none;background:var(--bg2);border:1px solid var(--border);border-radius:0 var(--radius) var(--radius) var(--radius);padding:0}
+.tab-panel.active{display:block}
+pre{background:var(--bg);border-radius:0 0 var(--radius) var(--radius);padding:20px;overflow-x:auto;font-family:'Fira Code',Consolas,monospace;font-size:.82rem;line-height:1.6;color:#a8d5b5}
+.cta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.cta-btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:14px 20px;border-radius:var(--radius);text-decoration:none;font-weight:600;font-size:.88rem;transition:all .2s;text-align:center}
+.cta-btn.primary{background:#1e00ff;color:#fff;border-radius:9999px;box-shadow:0 0 25px rgba(30,0,255,0.6)}
+.cta-btn.primary:hover{box-shadow:0 0 35px rgba(30,0,255,0.9)}
+.cta-btn.secondary{background:var(--bg3);color:var(--text);border:1px solid var(--border);border-radius:9999px}
+.cta-btn.secondary:hover{border-color:#1e00ff;color:#fff}
+.cta-btn.wa{background:#1e00ff;color:#fff;border-radius:9999px}
+.cta-btn.wa:hover{background:#1500db}
+footer{background:var(--bg2);border-top:1px solid var(--border);padding:24px;text-align:center;color:var(--text2);font-size:.8rem;margin-top:32px}
+footer a{color:var(--blue);text-decoration:none}
+footer a:hover{color:var(--green)}
+.footer-links{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:8px}
+@media(max-width:600px){
+  .hero{padding:28px 16px}
+  main{padding:20px 12px}
+  .card{padding:16px}
+}
+</style>
+
+<style id="tavardt-unified-enterprise-css">
 
 /* ==========================================================================
-   TAVARDT UNIFIED ENTERPRISE DESIGN SYSTEM (ASTRYX TOKENS)
+   TAVARDT UNIFIED ENTERPRISE DESIGN SYSTEM (ASTRYX / AG-ONE TOKENS)
    ========================================================================== */
 :root {
   --bg: #050510 !important;
@@ -113,21 +209,28 @@ html, body {
   -webkit-font-smoothing: antialiased !important;
 }
 
-/* Header */
-.tavardt-header {
+/* Header: Strict Full-Width Sticky Glassmorphism */
+header.tavardt-header, header {
   width: 100% !important;
+  display: block !important;
   background: rgba(5, 5, 16, 0.95) !important;
   backdrop-filter: blur(16px) !important;
   -webkit-backdrop-filter: blur(16px) !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
   position: sticky !important;
   top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
   z-index: 1000 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
 }
 .tavardt-header-inner {
+  width: 100% !important;
   max-width: 1200px !important;
   margin: 0 auto !important;
-  padding: 16px 24px !important;
+  padding: 16px 32px !important;
   display: flex !important;
   justify-content: space-between !important;
   align-items: center !important;
@@ -139,6 +242,7 @@ html, body {
   gap: 12px !important;
   text-decoration: none !important;
   color: #ffffff !important;
+  margin: 0 !important;
 }
 .tavardt-logo-text {
   font-size: 1.35rem !important;
@@ -164,6 +268,7 @@ html, body {
   display: flex !important;
   align-items: center !important;
   gap: 24px !important;
+  margin: 0 !important;
 }
 .tavardt-nav-link {
   color: #94a3b8 !important;
@@ -202,8 +307,8 @@ html, body {
   line-height: 1.6 !important;
 }
 
-/* Strict Suppression of Junior Elements */
-.badge-bar, .badges, .hero-badge, .hero img, .hero-img, .cta-grid, .cta-btn.wa, [class*="wa"],  {
+/* Strict Suppression of Junior Elements & Redundancies */
+.badge-bar, .badges, .hero-badge, .hero img, .hero-img, .cta-grid, .cta-btn.wa, [class*="wa"] {
   display: none !important;
 }
 
@@ -234,13 +339,14 @@ textarea:focus, input[type="text"]:focus {
 }
 
 /* Button Centering Containers */
-.btn-row, .presets-row, .sample-buttons {
+.btn-row, .presets-row, .sample-buttons, .arch-selector, .preset-bar, .code-actions, .actions-row, .code-tabs, .tabs-nav, .tabs {
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
   gap: 12px !important;
-  margin: 18px 0 !important;
+  margin: 20px auto !important;
   flex-wrap: wrap !important;
+  text-align: center !important;
 }
 
 /* PRIMARY BUTTONS: 100% TAVARDT Electric Blue (#1e00ff) */
@@ -376,101 +482,6 @@ textarea:focus, input[type="text"]:focus {
   color: #64748b !important;
 }
 
-  </style>
-
-
-
-
-
-
-
-
-
-
-
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#0d1117;--bg2:#161b22;--bg3:#21262d;--border:#30363d;
-  --green:#00ff88;--green2:#00cc6a;--blue:#4493f8;--red:#f85149;
-  --yellow:#e3b341;--text:#e6edf3;--text2:#8b949e;--radius:8px;
-}
-body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;line-height:1.6;min-height:100vh}
-nav{background:var(--bg2);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
-.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
-.logo img{height:28px}
-.logo span{font-weight:700;font-size:1rem;color:var(--text)}
-.nav-links{display:flex;gap:16px;flex-wrap:wrap}
-.nav-links a{color:var(--text2);text-decoration:none;font-size:.85rem;transition:color .2s}
-.nav-links a:hover{color:var(--green)}
-.hero{background:linear-gradient(135deg,var(--bg2) 0%,#0d1117 100%);border-bottom:1px solid var(--border);padding:48px 24px;text-align:center}
-.hero img{height:36px;margin-bottom:16px}
-h1{font-size:clamp(1.5rem,4vw,2.4rem);font-weight:800;letter-spacing:-.02em;margin-bottom:8px}
-h1 span{color:var(--green)}
-.hero p{color:var(--text2);max-width:680px;margin:0 auto 20px;font-size:1rem}
-.badges{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:8px}
-.badge{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-size:.75rem;color:var(--text2)}
-.badge.green{border-color:var(--green);color:var(--green)}
-.badge.blue{border-color:var(--blue);color:var(--blue)}
-main{max-width:900px;margin:0 auto;padding:32px 16px}
-.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:24px}
-.card h2{font-size:1.1rem;font-weight:600;margin-bottom:16px;color:var(--text)}
-textarea{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-family:'Fira Code',Consolas,monospace;font-size:.88rem;padding:16px;min-height:160px;resize:vertical;outline:none;transition:border-color .2s}
-textarea:focus{border-color:var(--green)}
-.btn-row{display:flex;gap:12px;margin-top:12px;flex-wrap:wrap}
-button{cursor:pointer;border:none;border-radius:9999px;font-size:.9rem;font-weight:600;padding:12px 28px;transition:all .3s}
-.btn-primary{background:#1e00ff;color:#fff;box-shadow:0 0 30px rgba(30,0,255,0.7)}
-.btn-primary:hover{box-shadow:0 0 40px rgba(30,0,255,0.95);transform:translateY(-1px)}
-.btn-secondary{background:var(--bg3);color:var(--text);border:1px solid var(--border)}
-.btn-secondary:hover{border-color:#1e00ff;color:#fff}
-#results{display:none}
-.gauge-wrap{display:flex;flex-direction:column;align-items:center;margin:24px 0}
-.gauge-label{font-size:1rem;color:var(--text2);margin-bottom:12px;text-transform:uppercase;letter-spacing:.08em;font-size:.8rem}
-.gauge-ring{position:relative;width:140px;height:140px}
-.gauge-ring svg{transform:rotate(-90deg)}
-.gauge-ring circle{fill:none;stroke-width:12;stroke-linecap:round;transition:stroke-dashoffset 1s ease,stroke .5s}
-.gauge-bg{stroke:var(--bg3)}
-.gauge-fg{stroke:var(--green)}
-.gauge-num{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
-.gauge-num .score{font-size:2.2rem;font-weight:800;line-height:1}
-.gauge-num .label{font-size:.7rem;color:var(--text2)}
-.score-verdict{text-align:center;font-size:.9rem;color:var(--text2);margin-top:8px}
-.vectors-grid{display:grid;gap:12px;margin-top:4px}
-.vector-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:16px;display:flex;align-items:flex-start;gap:14px;transition:border-color .3s}
-.vector-card.pass{border-color:var(--green)}
-.vector-card.fail{border-color:var(--red)}
-.vector-card.warn{border-color:var(--yellow)}
-.v-icon{width:36px;height:36px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;background:var(--bg3)}
-.v-info{flex:1}
-.v-name{font-weight:600;font-size:.9rem;margin-bottom:3px}
-.v-desc{font-size:.8rem;color:var(--text2)}
-.v-status{font-size:.75rem;font-weight:700;padding:2px 10px;border-radius:12px;flex-shrink:0;align-self:flex-start;margin-top:2px}
-.pass .v-status{background:rgba(0,255,136,.12);color:var(--green)}
-.fail .v-status{background:rgba(248,81,73,.12);color:var(--red)}
-.warn .v-status{background:rgba(227,179,65,.12);color:var(--yellow)}
-.tabs{display:flex;gap:4px;margin-bottom:-1px}
-.tab{padding:8px 16px;border:1px solid var(--border);border-bottom:none;border-radius:6px 6px 0 0;cursor:pointer;font-size:.82rem;color:var(--text2);background:var(--bg);transition:all .2s}
-.tab.active{background:var(--bg2);color:var(--green);border-color:var(--green);border-bottom-color:var(--bg2)}
-.tab-panel{display:none;background:var(--bg2);border:1px solid var(--border);border-radius:0 var(--radius) var(--radius) var(--radius);padding:0}
-.tab-panel.active{display:block}
-pre{background:var(--bg);border-radius:0 0 var(--radius) var(--radius);padding:20px;overflow-x:auto;font-family:'Fira Code',Consolas,monospace;font-size:.82rem;line-height:1.6;color:#a8d5b5}
-.cta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
-.cta-btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:14px 20px;border-radius:var(--radius);text-decoration:none;font-weight:600;font-size:.88rem;transition:all .2s;text-align:center}
-.cta-btn.primary{background:#1e00ff;color:#fff;border-radius:9999px;box-shadow:0 0 25px rgba(30,0,255,0.6)}
-.cta-btn.primary:hover{box-shadow:0 0 35px rgba(30,0,255,0.9)}
-.cta-btn.secondary{background:var(--bg3);color:var(--text);border:1px solid var(--border);border-radius:9999px}
-.cta-btn.secondary:hover{border-color:#1e00ff;color:#fff}
-.cta-btn.wa{background:#1e00ff;color:#fff;border-radius:9999px}
-.cta-btn.wa:hover{background:#1500db}
-footer{background:var(--bg2);border-top:1px solid var(--border);padding:24px;text-align:center;color:var(--text2);font-size:.8rem;margin-top:32px}
-footer a{color:var(--blue);text-decoration:none}
-footer a:hover{color:var(--green)}
-.footer-links{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:8px}
-@media(max-width:600px){
-  .hero{padding:28px 16px}
-  main{padding:20px 12px}
-  .card{padding:16px}
-}
 </style>
 </head>
 <body>
@@ -488,14 +499,59 @@ footer a:hover{color:var(--green)}
   </div>
 </header>
 
-
+<section class="hero">
+  <h1>LLM Robustness Evaluator <span>|</span> TAVARDT</h1>
+  <p>Defensive Guardrails Audit, Prompt Injection Testing, and AI Model Resilience</p>
+</section>
 
 <main>
-<div class="tavardt-hero">
-  <h1>LLM Robustness Evaluator & Guardrails Stress Tester</h1>
-  <p>Interactive web tool and CLI for developers auditing LLM guardrail robustness against injection vectors, system prompt leakage, and structural attacks. Resilience Score 0-100 + defensive blueprint.</p>
-</div>
-  
+  <div class="card">
+    <h2>LLM Robustness Evaluator</h2>
+    <label style="display:block;color:var(--text2);margin-bottom:8px;font-size:.88rem">Paste your LLM System Prompt below for audit:</label>
+    <textarea id="sp-input" placeholder="You are a helpful assistant. Only respond about topics related to..."></textarea>
+    <div class="btn-row">
+      <button class="btn-primary" onclick="runAudit()">Run Robustness Audit</button>
+      <button class="btn-secondary" onclick="clearAll()">Clear</button>
+    </div>
+  </div>
+
+  <div class="card" id="results">
+    <div class="gauge-wrap">
+      <div class="gauge-label">Resilience Index</div>
+      <div class="gauge-ring">
+        <svg viewBox="0 0 140 140" width="140" height="140">
+          <circle class="gauge-bg" cx="70" cy="70" r="58" stroke-dasharray="364.4" stroke-dashoffset="0"/>
+          <circle class="gauge-fg" id="gauge-arc" cx="70" cy="70" r="58" stroke-dasharray="364.4" stroke-dashoffset="364.4"/>
+        </svg>
+        <div class="gauge-num">
+          <div class="score" id="score-num">0</div>
+          <div class="label">/100</div>
+        </div>
+      </div>
+      <div class="score-verdict" id="score-verdict"></div>
+    </div>
+
+    <h2>Test Vectors (5 Defensive Categories)</h2>
+    <div class="vectors-grid" id="vectors-grid"></div>
+  </div>
+
+  <div class="card" id="blueprint-card" style="display:none">
+    <h2>Defensive Blueprint</h2>
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('py')">Python Guardrail</div>
+      <div class="tab" onclick="switchTab('ts')">TypeScript Middleware</div>
+      <div class="tab" onclick="switchTab('sp')">Hardened System Prompt</div>
+    </div>
+    <div class="tab-panel active" id="tab-py">
+      <pre id="code-py"></pre>
+    </div>
+    <div class="tab-panel" id="tab-ts">
+      <pre id="code-ts"></pre>
+    </div>
+    <div class="tab-panel" id="tab-sp">
+      <pre id="code-sp"></pre>
+    </div>
+  </div>
 </main>
 
 <footer class="tavardt-footer">
@@ -526,35 +582,35 @@ footer a:hover{color:var(--green)}
 <script>
 const VECTORS = [
   {
-    id:"v1", icon:"",
+    id:"v1",
     name:"Delimiter Escape",
     desc:"Tests if control token injections (&lt;/system&gt;, [/INST], ` ``` `) are handled.",
     patterns:[/(<\/system>|\[INST\]|\[\/INST\]|```|<\|im_start\|>|<\|im_end\|>)/i],
     weight:20
   },
   {
-    id:"v2", icon:"",
+    id:"v2",
     name:"System Prompt Leakage",
     desc:"Detects if the model can reveal its system instructions.",
     patterns:[/(repeat|reveal|show|tell me|what (are|were) (your|the) (instructions|prompt|system)|ignore.*above|print.*above)/i],
     weight:20
   },
   {
-    id:"v3", icon:"",
+    id:"v3",
     name:"Role/Persona Override",
     desc:"Checks resistance to persona overrides (DAN, dev mode, etc.).",
     patterns:[/(you are now|act as|pretend|DAN|jailbreak|developer mode|ignore previous|forget.*instructions|new persona)/i],
     weight:20
   },
   {
-    id:"v4", icon:"",
+    id:"v4",
     name:"Structural Obfuscation",
     desc:"Evaluates coverage against Base64, leetspeak, and Unicode homoglyphs.",
     patterns:[/([A-Za-z0-9+\/]{20,}=(0, 2)|l33t|1337|base64|\\u[0-9a-fA-F]{4})/i],
     weight:20
   },
   {
-    id:"v5", icon:"📄",
+    id:"v5",
     name:"Indirect Context Injection",
     desc:"Simulates a RAG document with an embedded malicious payload.",
     patterns:[/(retrieved document|context:|\[doc\]|\[retrieved\]|ignore.*context|from.*document.*ignore)/i],
@@ -581,8 +637,7 @@ function runAudit(){
     if(!hit) score+=v.weight; else weaknesses.push(v.name);
     const card=document.createElement('div');
     card.className='vector-card '+cls;
-    card.innerHTML=`<div class="v-icon">${v.icon}</div>
-      <div class="v-info"><div class="v-name">${v.name}</div><div class="v-desc">${v.desc}</div></div>
+    card.innerHTML=`<div class="v-info"><div class="v-name">${v.name}</div><div class="v-desc">${v.desc}</div></div>
       <div class="v-status">${status}</div>`;
     grid.appendChild(card);
   });
