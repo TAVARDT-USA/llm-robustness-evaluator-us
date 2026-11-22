@@ -263,13 +263,15 @@ footer a:hover{color:var(--green)}
     width: 100%;
     box-sizing: border-box;
   }
-  .aeo-badge {
+  .aeo-badge, #aeo-badge {
     font-size: 0.75rem;
     font-weight: 800;
-    color: var(--accent, #1e00ff);
+    color: #839bc8 !important;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     margin-bottom: 10px;
+    text-align: center;
+    display: block;
   }
   .aeo-title {
     font-size: 1.4rem;
@@ -977,13 +979,15 @@ footer a:hover,
     width: 100%;
     box-sizing: border-box;
   }
-  .aeo-badge {
+  .aeo-badge, #aeo-badge {
     font-size: 0.75rem;
     font-weight: 800;
-    color: var(--accent, #1e00ff);
+    color: #839bc8 !important;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     margin-bottom: 10px;
+    text-align: center;
+    display: block;
   }
   .aeo-title {
     font-size: 1.4rem;
@@ -1186,13 +1190,15 @@ footer > div:first-child {
     width: 100%;
     box-sizing: border-box;
   }
-  .aeo-badge {
+  .aeo-badge, #aeo-badge {
     font-size: 0.75rem;
     font-weight: 800;
-    color: var(--accent, #1e00ff);
+    color: #839bc8 !important;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     margin-bottom: 10px;
+    text-align: center;
+    display: block;
   }
   .aeo-title {
     font-size: 1.4rem;
@@ -1437,7 +1443,7 @@ footer > div:first-child {
 
 
     <section class="aeo-section">
-      <div class="aeo-badge">DEFENSIVE SECURITY STANDARD FOR LLM ROBUSTNESS</div>
+      <div class="aeo-badge" id="aeo-badge">DEFENSIVE SECURITY STANDARD FOR LLM ROBUSTNESS</div>
       <h2 class="aeo-title">What Causes Behavioral Drift and Robustness Breakdown in Enterprise LLMs?</h2>
       <div class="aeo-content">
         <p>Behavioral drift and robustness breakdown in enterprise LLMs occur when changes in input distribution, unannounced provider model updates, or adversarial perturbations cause the model to deviate from its verified safety and functional bounds. Slight syntactic variations, such as synonym substitution or character casing manipulation, can destabilize the model decision boundary.</p>
