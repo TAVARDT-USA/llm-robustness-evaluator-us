@@ -391,6 +391,42 @@ footer a:hover{color:var(--green)}
     display: block;
   }
 
+
+    .faq-btn {
+      width: 100%;
+      background: transparent;
+      border: none;
+      padding: 16px 20px;
+      text-align: left;
+      font-size: 0.96rem;
+      font-weight: 600;
+      color: #f1f5f9;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+    .faq-btn:hover {
+      background: #0f172a;
+    }
+    .faq-icon {
+      font-size: 1.25rem;
+      color: #839bc8;
+      transition: transform 0.2s ease;
+    }
+    .faq-item.active .faq-icon {
+      transform: rotate(45deg);
+    }
+    .faq-body {
+      display: none;
+      padding: 0 20px 18px;
+      color: #94a3b8;
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+    .faq-item.active .faq-body {
+      display: block;
+    }
 </style>
 <style id="tavardt-unified-enterprise-css">
 
@@ -1445,7 +1481,53 @@ footer > div:first-child {
 </section>
 <section class="faq-section">
 <h2 class="faq-title">Frequently Asked Questions on LLM Robustness</h2>
-<div class="faq-list"><div class="faq-item"><div class="faq-question">What does the LLM Robustness Evaluator measure?<span class="faq-toggle">+</span></div><div class="faq-answer">The tool evaluates system prompts against structured attack patterns (injection, jailbreaking, delimiter collision, and rule extraction), computing a 0-100 resilience score.</div></div><div class="faq-item"><div class="faq-question">What is direct prompt injection and why is it critical?<span class="faq-toggle">+</span></div><div class="faq-answer">Direct prompt injection occurs when user input overrides core system constraints, enabling policy violations, malicious completions, and proprietary logic leakage.</div></div><div class="faq-item"><div class="faq-question">Does this evaluation upload my system prompt to external servers?<span class="faq-toggle">+</span></div><div class="faq-answer">No. All heuristic evaluations and static audits run strictly client-side in memory with zero data retention or telemetry.</div></div><div class="faq-item"><div class="faq-question">How should defensive guardrails be implemented in Python or TypeScript?<span class="faq-toggle">+</span></div><div class="faq-answer">By leveraging deterministic middleware that validates inputs prior to model invocation, enforces strict XML/Markdown fencing, and sanitizes adversarial tokens.</div></div><div class="faq-item"><div class="faq-question">How does TAVARDT harden production LLM systems?<span class="faq-toggle">+</span></div><div class="faq-answer">TAVARDT designs multi-layered defense architectures: ultra-low latency semantic guardrails, Cloudflare edge sanitization, and continuous adversarial audits.</div></div></div>
+<div class="faq-list">
+<div class="faq-item">
+<button class="faq-btn" onclick="toggleFaq(this)" type="button">
+<span>What does the LLM Robustness Evaluator measure?</span>
+<span class="faq-icon">+</span>
+</button>
+<div class="faq-body">
+The tool evaluates system prompts against structured attack patterns (injection, jailbreaking, delimiter collision, and rule extraction), computing a 0-100 resilience score.
+</div>
+</div>
+<div class="faq-item">
+<button class="faq-btn" onclick="toggleFaq(this)" type="button">
+<span>What is direct prompt injection and why is it critical?</span>
+<span class="faq-icon">+</span>
+</button>
+<div class="faq-body">
+Direct prompt injection occurs when user input overrides core system constraints, enabling policy violations, malicious completions, and proprietary logic leakage.
+</div>
+</div>
+<div class="faq-item">
+<button class="faq-btn" onclick="toggleFaq(this)" type="button">
+<span>Does this evaluation upload my system prompt to external servers?</span>
+<span class="faq-icon">+</span>
+</button>
+<div class="faq-body">
+No. All heuristic evaluations and static audits run strictly client-side in memory with zero data retention or telemetry.
+</div>
+</div>
+<div class="faq-item">
+<button class="faq-btn" onclick="toggleFaq(this)" type="button">
+<span>How should defensive guardrails be implemented in Python or TypeScript?</span>
+<span class="faq-icon">+</span>
+</button>
+<div class="faq-body">
+By leveraging deterministic middleware that validates inputs prior to model invocation, enforces strict XML/Markdown fencing, and sanitizes adversarial tokens.
+</div>
+</div>
+<div class="faq-item">
+<button class="faq-btn" onclick="toggleFaq(this)" type="button">
+<span>How does TAVARDT harden production LLM systems?</span>
+<span class="faq-icon">+</span>
+</button>
+<div class="faq-body">
+TAVARDT designs multi-layered defense architectures: ultra-low latency semantic guardrails, Cloudflare edge sanitization, and continuous adversarial audits.
+</div>
+</div>
+</div>
 </section>
 <div class="cta-card">
 <h3>Require Enterprise Hardening for Your Production LLMs?</h3>
